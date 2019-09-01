@@ -1,23 +1,37 @@
 const container = document.querySelector('.container');
 const btn1 = document.querySelector('#btn1');
 const btn2 = document.querySelector('#btn2');
+const btn3 = document.querySelector('#btn3');
 
+let fragment = getFragment();
 
-container.append(getFragment());
-container.addEventListener('mousemove', colorSeting);
+container.append(fragment);
+container.addEventListener('mouseover', colorSeting);
 btn1.addEventListener('click', firstColor);
 btn2.addEventListener('click', oneColor);
+btn3.addEventListener('click', resizeGrid);
+
+function resizeGrid() {
+    container.innerHTML = '';
+    let size = prompt('How size you need?', 16);
+    fragment = getFragment(parseInt(size));
+    container.append(fragment);
+    size = `repeat(${size}, 1fr)`;
+    container.style.gridTemplateRows = size;
+    container.style.gridTemplateColumns = size;
+    
+}
 
 function firstColor() {
-    container.removeEventListener('mousemove', colorYellow);
+    container.removeEventListener('mouseover', colorYellow);
     resetColor();
-    container.addEventListener('mousemove', colorSeting);
+    container.addEventListener('mouseover', colorSeting);
 }
 
 function oneColor() {
-    container.removeEventListener('mousemove', colorSeting);
+    container.removeEventListener('mouseover', colorSeting);
     resetColor();
-    container.addEventListener('mousemove', colorYellow);
+    container.addEventListener('mouseover', colorYellow);
 }
 
 
@@ -27,9 +41,10 @@ function resetColor() {
 }
 
 
-function getFragment() {
+function getFragment(startCount = 16) {
+    
     let fragments = new DocumentFragment();
-    let countBlock = 16;
+    let countBlock = startCount;
     for (let i = 0; i < countBlock; i++) {
         for (let j = 0; j < countBlock; j++) {
             let div = document.createElement('div');
@@ -37,6 +52,7 @@ function getFragment() {
             fragments.append(div);
         }
     }
+    
     return fragments;
 }
 
